@@ -62,7 +62,7 @@ const thoughtController = {
     deleteThought({ params }, res) {
         Thought.findOneAndDelete({ _id: params.id })
             .then(dbThoughtData => {
-                if (!dbUserData) {
+                if (!dbThoughtData) {
                     res.status(404).json({ message: 'No thought found with this ID' });
                     return;
                 }
@@ -88,8 +88,8 @@ const thoughtController = {
         })
         .catch(err => res.status(400).json(err));
     },
-    deleteReaction({ params, body }, res) {
-        Thought.findByIdAndUpdate({ _id: params.thoughtId }, { $pull: { reactions: { reactionId: body.reactionId } } }, { new: true })
+    deleteReaction({ params }, res) {
+        Thought.findByIdAndUpdate( params.thoughtId , { $pull: { reactions: { reactionId: params.reactions } } }, { new: true })
         .then(dbThoughtData => {
             if(!dbThoughtData) {
                 res.status(404).json({ message: 'No reaction found with this Id!' });
